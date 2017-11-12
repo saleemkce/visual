@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#external_filter_container_wrapper {
+    margin-bottom: 20px;
+}
+#external_filter_container {
+    display: inline-block;
+}
+
+#header {
+    position: relative;
+    text-align: center;
+    background: url(images/banner.jpg) no-repeat center;
+    background-size: cover;
+    padding: 1px;
+    height: 60px;
+}
+
+#logo h1 a{
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-weight: 500;
+    color: #323338;
+    font-family: 'Lato', sans-serif;
+}
+
+/*toggle visibility CSS*/
+a.toggle-visibility {
+    cursor: pointer;
+}
+
+ul.toggler {
+    list-style-type: none;
+    /*margin: 0;*/
+    margin: 0 1 5 1;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+
+    width: 100%;
+    float: right;
+}
+
+ul.toggler li {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+
+ul.toggler li:last-child {
+    border-right: none;
+}
+
+ul.toggler li a {
+    display: block;
+    color: white;
+    text-align: center;
+    /*padding: 16px;*/
+    padding: 8px;
+    text-decoration: none;
+}
+
+ul.toggler li a:hover {
+    background-color: #111111;
+}
+
+.toggle-heading-holder {
+    background-color: #101010;
+    margin-left: 1%;
+    display: inline-block;
+    height: 25px;
+}
+
+.toggle-heading {
+    background-color: #101010;
+    color: #d0c9c9;
+    padding: 6px;
+    border-radius: 10px;
+}

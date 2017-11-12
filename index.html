@@ -1,0 +1,103 @@
+<html>
+<head>
+    <title>Time On Site - Reports | Datatable</title>
+    <meta charset="UTF-8">
+
+    <link rel='stylesheet' type='text/css' href='frontend/jquery.dataTables.1.10.15.min.css'>
+    <link rel='stylesheet' type='text/css' href='frontend/jquery.dataTables_themeroller.css'>
+    <link rel='stylesheet' type='text/css' href='frontend/jquery-ui.1.12.1.css'>
+    <link rel='stylesheet' type='text/css'  href='frontend/reports-dashboard.css'>
+    <link rel='stylesheet' type='text/css' href='frontend/shared-dashboards.css'>
+
+    <script type='text/javascript' charset='utf8' src='frontend/jquery-1.12.1.js'></script>    
+    <script type='text/javascript' charset='utf8' src='frontend/jquery-ui.1.12.1.js'></script>
+    <script type='text/javascript' charset='utf8' src='frontend/jquery.dataTables.1.10.15.min.js'></script>
+    <script type='text/javascript' charset='utf8' src='config/config.js'></script>
+    <script type='text/javascript' charset='utf8' src='frontend/datatable-custom.js'></script>
+</head>
+<body>
+    <div id="header">
+        <div class="container"> 
+            <div id="logo">
+                <h1 style="color:#000;"><a href="#">Reports Dashboard</a></h1>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <a href="frontend/analytics/index.html" class="view-type">
+            <div class="view-type-header">
+                Chart view
+            </div>
+        </a>
+    </div>
+
+    <div id='container'>
+
+        <div id='external_filter_container_wrapper'>
+                <label>Date filter </label>
+                <input type="text" id="datepickerPageEntry" placeholder="Search page entry" />
+                <input type="text" id="datepickerPageExit" placeholder="Search page exit" />
+            <div id='external_filter_container'></div>
+        </div>
+
+        <!-- column visibility toggle  -->
+        <div>
+            <span class="toggle-heading-holder">
+                <span class="toggle-heading">Toggle Column</span>
+            </span>
+            <ul class="toggler">
+                <!-- <li><a class="toggle-visibility" data-active='1' data-column="0">TOSId</a></li> -->
+                <li><a class="toggle-visibility" data-active='1' data-column="1">TOSSessionKey</a></li> 
+                <li><a class="toggle-visibility" data-active='1' data-column="2">URL</a></li> 
+                <li><a class="toggle-visibility" data-active='1' data-column="3">Title</a></li> 
+                <li><a class="toggle-visibility" data-active='1' data-column="4">User</a></li>
+                <li><a class="toggle-visibility" data-active='1' data-column="5">Page Entry</a></li>
+                <li><a class="toggle-visibility" data-active='1' data-column="6">Page Exit</a></li>
+                <li><a class="toggle-visibility" data-active='1' data-column="7">TOP</a></li>
+                <li><a class="toggle-visibility" data-active='1' data-column="8">TOS</a></li>
+                <li><a class="toggle-visibility" data-active='1' data-column="9">Duration(TOS)</a></li>
+                <li><a class="toggle-visibility" data-active='1' data-column="10">TrackedBy</a></li>
+                <li><a class="toggle-visibility" data-active='1' data-column="11">Duration(TOP)</a></li>
+            </ul>
+
+        </div>
+
+        <table id='TimeOnSiteReports' class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>TOSId</th>
+                    <th>TOSSessionKey</th>  
+                    <th>URL</th>
+                    <th>Title</th>
+                    <th>User</th>  
+                    <th>Page Entry</th>
+                    <th>Page Exit</th>  
+                    <th>TOP</th>
+                    <th>TOS</th>
+                    <th>Duration(TOS)</th> 
+                    <th>TrackedBy</th>
+                    <th>Duration(TOP)</th>  
+                </tr>
+            </thead>
+
+            <tfoot>
+                <tr>
+                    <th>TOSId</th>
+                    <th>TOSSessionKey</th>  
+                    <th>URL</th>
+                    <th>Title</th>
+                    <th>User</th>  
+                    <th>Page Entry</th>
+                    <th>Page Exit</th>  
+                    <th>TOP</th>
+                    <th>TOS</th>
+                    <th>Duration(TOS)</th> 
+                    <th>TrackedBy</th>
+                    <th>Duration(TOP)</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html> 

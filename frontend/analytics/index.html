@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<!--
+	Synchronous by TEMPLATED
+    templated.co @templatedco
+    Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+<head>
+	<title>Time On Site - Reports | Analytics Dashboard</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	
+	<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
+	<script src="../jquery-1.12.1.js"></script>
+	<script src="../jquery-ui.1.12.1.js"></script>
+	<script src="js/skel.min.js"></script>
+	<script src="js/skel-panels.min.js"></script>
+	<script src="js/init.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato:300,400,700,900" >
+	<link rel="stylesheet" type="text/css" href="../jquery-ui.1.12.1.css">
+	<link rel="stylesheet" type="text/css" href="css/dc.css" />
+	<link rel="stylesheet" type="text/css" href="css/stylenew.css" />
+	<link rel="stylesheet" type="text/css" href="../shared-dashboards.css">
+	<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	<!--[if lte IE 9]><link rel="stylesheet" href="css/ie/v9.css" /><![endif]-->
+</head>
+<body>
+	<div id="wrapper">
+		
+		<!-- Header -->
+		<div id="header">
+			<div class="container">
+				<!-- Logo -->
+				<div id="logo">
+					<h1><a href="#">Analytics Dashboard</a></h1>
+				</div>
+				<!-- Logo -->
+			</div>
+		</div>
+		<!-- /Header -->
+
+		<a href="../../index.html" class="view-type">
+	        <div class="view-type-header" style="height: 40px !important;">
+	            Data view
+	        </div>
+	    </a>
+
+	    <div id="messageDialog" style="display: none">
+		    No data found for given date!
+		</div>
+		
+		<div id="page" style="margin-top:-61px;">
+
+			<div class="container">
+
+				<div class="row">
+					<!-- <div class="2u chart-wrapper" id="menuselect" style="background-color: #33CC99; height: 60px;">
+						<div class="chart-title">  <strong> State Selector </strong> </div>					
+					</div>
+					<div class="2u">
+			<div> <span> &nbsp</span></div>
+					</div> -->
+					<div class="2u chart-wrapper" id="total-views">
+						<div class="chart-title">  <strong> Total Occurances</strong> </div>					
+					</div>
+					<div class="2u chart-wrapper" id="net-donations">
+						<!-- <div class="chart-title">  <strong> Nett Donations ($) </strong> </div> -->					
+					</div>
+
+
+					<div class="3u dc-data-count dc-chart" id="row-selection">
+						<span class="filter-count">_</span> selected out of <span class="total-count">_</span> records |
+						<span>
+							<a href="javascript:dc.filterAll();dc.redrawAll();"><font color="#33CC99">Reset All</font></a>
+						</span>
+					</div>	
+
+				</div>
+
+				<div class="row">
+					<span style="margin-right:5px;">Date filter</span>
+					<input type="text" id="datepickerPageEntry" placeholder="Start Date" style="width: 150px !important;" />
+					<span style="margin-left:10px;"></span>
+					<input type="text" id="datepickerPageExit" placeholder="End Date" style="width: 150px !important;" />
+				</div>
+
+
+				<div class="row">
+					<div class="6u chart-wrapper"  id="date-chart">
+						<div class="chart-title bold"> <strong> Number Of Pageviews </strong></div>
+
+					</div>
+					<div class="3u chart-wrapper" id="resource-chart">
+						<div class="chart-title">  <strong> Pageviews By Title </strong> </div>							
+
+					</div>
+					<div class="3u chart-wrapper" id="auth-anonymous-chart">
+						<div class="chart-title">  <strong> User Sessions </strong> </div>					
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- <div class="4u chart-wrapper"  id="grade-chart">
+						<div class="chart-title">  <strong> Donation Count by Grade </strong> </div>
+					</div> -->
+
+					<!-- <div class="4u chart-wrapper">
+					</div> -->
+
+					<!-- ***************************************************** 
+
+					This is working date chart now commented id="state-donations"
+
+					******************************************************** -->
+					<!-- <div class="4u chart-wrapper"  id="state-donations">
+						<div class="chart-title">  <strong> Time on site by sessions </strong> </div>
+					</div> -->
+
+				</div>
+
+				<div class="row">
+					<div class="12u chart-wrapper">
+						<table class="ui-visual-table" id="dc-data-table"></table>
+					</div>
+				</div>
+
+			</div>	
+		</div>
+	</div>
+
+	<script src="js/crossfilter.js" type="text/javascript"></script>
+	<script src="js/d3.js" type="text/javascript"></script>
+	<script src="js/dc.js" type="text/javascript"></script>
+	<script src="js/queue.js" type="text/javascript"></script>
+	<script type="text/javascript" charset="utf8" src="../../config/config.js"></script>
+	<script src="js/Dashboard.js" type="text/javascript"></script>
+</body>
+</html>

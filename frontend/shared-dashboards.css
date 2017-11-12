@@ -1,0 +1,17 @@
+.view-type-header
+{
+    float: right;
+    height: 30px;
+    text-align: center;
+    background: #424141;
+    width: 170px;
+    padding-top: 10px;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+}
+
+a.view-type
+{
+    text-decoration: none;
+    color: #fff;
+}
