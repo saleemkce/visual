@@ -81,3 +81,35 @@ ul.toggler li a:hover {
     padding: 6px;
     border-radius: 10px;
 }
+
+input.text-field {
+    background: #FFF;
+    border: 1px dotted #888;
+    font-size: 14px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 150px !important;
+    margin-top: 10px;
+    font: 13.3333px Arial;
+    font-size: 14px;
+    padding-top: 4px !important;
+}
+
+.date-filter-label {
+    font-family: 'Lato', sans-serif;
+    font-size: 12pt;
+    color: #8A8A8A;
+    padding-left: 40px;
+}
+
+.search-filter-clear {
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-family: 'Lato', sans-serif;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #3182bd;
+    font-style: italic;
+}

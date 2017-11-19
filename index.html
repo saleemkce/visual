@@ -29,15 +29,22 @@
             <div class="view-type-header">
                 Chart view
             </div>
+            <div id="dataSync" class="view-type-header" style="background: #a7a3a3 !important;">
+                <span id="dataSyncTitle">Sync Data</span>
+                <span id="refreshSuccess" style="display:none;color:#16f507;">Refreshed!</span>
+                <span id="refreshFailure" style="display:none;color:#fd1d1d;">Error!</span>
+            </div>
         </a>
+        <div class="search-filter-clear">Clear filters</div>
     </div>
 
     <div id='container'>
 
         <div id='external_filter_container_wrapper'>
-                <label>Date filter </label>
-                <input type="text" id="datepickerPageEntry" placeholder="Search page entry" />
-                <input type="text" id="datepickerPageExit" placeholder="Search page exit" />
+                <label class="date-filter-label">Date filter </label>
+                <input type="text" id="datepickerPageEntry" class="text-field" placeholder="Search page entry" />
+                <span style="margin-left:10px;"></span>
+                <input type="text" id="datepickerPageExit" class="text-field" placeholder="Search page exit" />
             <div id='external_filter_container'></div>
         </div>
 

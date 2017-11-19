@@ -36,10 +36,6 @@ class Database extends Exception {
         }
     }
 
-    public function cleanUpSession() {
-        session_destroy();
-    }
-
     /**
      * [handleException It handles all exceptions in application]
      * @param  Exception $e [exception thrown]

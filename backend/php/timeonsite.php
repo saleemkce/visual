@@ -1,5 +1,5 @@
 <?php
-require 'database.php';
+require_once 'database.php';
 
 class TimeOnSite extends Database {
     public $dbConnection = NULL;

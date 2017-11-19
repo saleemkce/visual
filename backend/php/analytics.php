@@ -1,9 +1,9 @@
 <?php
-require 'database.php';
+require_once 'database.php';
 
 class Analytics extends Database {
     public $dbConnection = NULL;
-    public $resultsLimit = 1000;
+    public $analyticsDataLimit = 10000;
 
     public function __construct() {
         $dbConfig = new Database();
@@ -19,10 +19,10 @@ class Analytics extends Database {
             // Perform queries
             if(isset($_GET['startDate']) && isset($_GET['endDate'])) {
                 if($this->isValidDate($_GET['startDate']) && $this->isValidDate($_GET['endDate'])) {
-                    $query = "SELECT * FROM tos WHERE entry_time >= '".$this->escapeInput($_GET['startDate'])."' AND exit_time  <= '".$this->escapeInput($_GET['endDate'])."' LIMIT " . $this->resultsLimit;
+                    $query = "SELECT * FROM tos WHERE entry_time >= '".$this->escapeInput($_GET['startDate'])."' AND exit_time  <= '".$this->escapeInput($_GET['endDate'])."' ORDER BY entry_time DESC LIMIT " . $this->analyticsDataLimit;
                 }
             } else {
-                $query = "SELECT * FROM tos LIMIT " . $this->resultsLimit;
+                $query = "SELECT * FROM tos ORDER BY entry_time DESC LIMIT " . $this->analyticsDataLimit;
             }
             
             $queryResponse = mysqli_query($this->dbConnection, $query);

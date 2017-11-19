@@ -15,17 +15,25 @@ var TOSConfig = {
 
 		analytics: {
 			url: 'http://localhost/visual/backend/php/analytics.php',
+		},
+
+		syncData: {
+			url: 'http://localhost/visual/backend/php/refresh.php',
 		}
 	},
 
 	//configuration for NodeJs. Backend URL for reports dashboard and analytics dashboard
 	nodeJs: {
 		reports: {
-			url: 'http://localhost:4500/data/tos/all/datatable',
+			url: 'http://localhost:4500/tos/datatable_reports',
 		},
 
 		analytics: {
-			url: 'http://localhost:4500/data/tos/all',
+			url: 'http://localhost:4500/tos/analytics',
+		},
+
+		syncData: {
+			url: 'http://localhost:4500/tos/datatable_refresh',
 		}
 	}
 };

@@ -49,9 +49,8 @@ module.exports.saveTos = function(req, res, next) {
         };
 
         var Tos = new TosSchema(freshData);
-        Tos.save(freshData, function(err){
+        Tos.save(freshData, function(err) {
             console.log(err);
-
         });
         
     } else if(data && data.trackingType && data.trackingType == 'activity') {
@@ -74,16 +73,8 @@ module.exports.saveTos = function(req, res, next) {
         };
 
         var Activity = new ActivitySchema(freshData);
-        Activity.save(freshData, function(err){
+        Activity.save(freshData, function(err) {
             console.log(err);
-            //console.log(resp);
-            
-            // if(!err) {
-            //     res.send('success');
-            // } else {
-
-            // }
-
         });
 
     }
@@ -131,7 +122,8 @@ module.exports.getTosPHP = function(req, res, next) {
  * @return {[array]}        [result set]
  */
 module.exports.getTosAnalytics = function(req, res, next) {
-    var whereCond = {}; 
+    var whereCond = {},
+        analyticsDataLimit = 10000; 
 
     if(req.query) {
         if(req.query.startDate && req.query.endDate && module.exports.isValidDate(req.query.startDate) && module.exports.isValidDate(req.query.endDate)) {
@@ -151,13 +143,15 @@ module.exports.getTosAnalytics = function(req, res, next) {
 
     TosSchema
         .find(whereCond)
-        .limit(10000)
+        .sort({
+            $natural: -1
+        })
+        .limit(analyticsDataLimit)
         .exec(function(err, data) {
             if (err) {
                 res.status(err);
             } else {
-                res.send(data);
-                //res.json(data);
+                res.json(data);
             }
         });
 
@@ -208,8 +202,7 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
         isSearchPresent = false;
 
     if (recordsCount && recordsCount >= 0) {
-        console.log('*** Just reteieve');
-        console.log('recordsCount variable holds ' + recordsCount);
+        console.log('*** Data count from cache ' + recordsCount);
         totalRecords = recordsCount;
         recordsFiltered = recordsCount;
     } else {
@@ -218,7 +211,7 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
                 console.log(err);
                 res.status(err);
             } else {
-                console.log('*** retrieve for first time, records count : ' + count);
+                console.log('*** Data count at first time : ' + count);
                 recordsCount = count;
                 totalRecords = count;
                 recordsFiltered = count;
@@ -424,6 +417,36 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
     }
 
 };
+
+/**
+ * [refreshData It updates "recordsCount" variable for data refresh]
+ * @param  {[object]}   req  [request object]
+ * @param  {[object]}   res  [respionse object]
+ * @param  {Function} next [callback function]
+ * @return {[json]}        [returns back 'refresh_success' code]
+ */
+module.exports.refreshData = function(req, res, next) {
+    if(req.body && req.body.timestamp) {
+        TosSchema.find().count(function(err, count) {
+            if (err) {
+                console.log(err);
+                res.status(err);
+            } else {
+                console.log('*** Data count after refresh : ' + count);
+                recordsCount = count;
+                res.json({
+                    code: 'refresh_success'
+                });
+            }
+        });
+    } else {
+        res.json({
+            message: 'Method POST - data is empty'
+        });
+    }
+    
+};
+
 
 /*
     entryTime: {"$gte": (new Date(2017, 1, 2, 22, 8, 53)).toISOString()}
