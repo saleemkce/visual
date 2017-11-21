@@ -4,7 +4,7 @@
 module.exports = {
 	environment : 'local',
 	db : {
-		hostname : 'localhost',
+		hostname : '127.0.0.1',
 		name : 'localdata',
 		username : 'root',
 		password : 'root',
