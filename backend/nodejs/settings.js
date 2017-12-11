@@ -5,7 +5,7 @@ module.exports = {
 	environment : 'local',
 	db : {
 		hostname : '127.0.0.1',
-		name : 'localdata',
+		name : 'tosdata',
 		username : 'root',
 		password : 'root',
 		port: 27017,

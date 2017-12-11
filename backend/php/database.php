@@ -1,5 +1,8 @@
 <?php
 session_start();
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Accept, Authorization, X-Requested-With, App-Session, App-Userid');
 
 class Database extends Exception {
     protected $serverName;
@@ -12,7 +15,7 @@ class Database extends Exception {
         $this->serverName = 'localhost';
         $this->username = 'root';
         $this->password = '';
-        $this->database = 'localdata';
+        $this->database = 'tosdata';
     }
 
     /**
