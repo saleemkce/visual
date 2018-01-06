@@ -80,6 +80,16 @@ class DataTableReports extends Database {
                 $ind = (int) $order['column'];
                 $orderBy = $colKeys[$ind]; 
                 $orderDir = $order['dir'];
+
+                // 2D array transformation in case of using datatable order() API
+                if(is_array($order['dir'])) {
+                    $newDirData = [];
+                    foreach($order['dir'] as $newDir) {
+                       $newDirData[] = $newDir;
+                    }
+                    $orderBy = $newDirData[0];
+                    $orderDir = $newDirData[1];
+                }
             }
             
             foreach($_POST['columns'] as $columns) {
