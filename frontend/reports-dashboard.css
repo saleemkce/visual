@@ -113,3 +113,7 @@ input.text-field {
     color: #3182bd;
     font-style: italic;
 }
+
+table#TimeOnSiteReports tr td.highlightTOSDuration {
+    background-color: #cecdcd !important;
+}

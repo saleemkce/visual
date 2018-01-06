@@ -143,72 +143,9 @@ $(document).ready(function() {
         columnDefs: [{
             'visible': false, 
             'targets': [ 0 ] // tos_id is hidden by this configuration
-        }],
-
-        // footerCallback: function ( row, data, start, end, display ) {
-
-        //     // console.log(row)
-        //     // console.log(data);
-        //     // console.log(start)
-        //     // console.log(end)
-        //     // console.log(display)
-
-
-        //     var api = this.api(), data;
-
-        //     // Remove the formatting to get integer data for summation
-        //     var intVal = function ( i ) {
-        //         return typeof i === 'string' ?
-        //             i.replace(/[\$,]/g, '')*1 :
-        //             typeof i === 'number' ?
-        //                 i : 0;
-        //     };
- 
-        //     // Total over all pages
-        //     total = api
-        //         .column( 7 )
-        //         .data()
-        //         .reduce( function (a, b) {
-        //             return intVal(a) + intVal(b);
-        //         }, 0 );
- 
-        //     // Total over this page
-        //     pageTotal = api
-        //         .column( 7, { page: 'current'} )
-        //         .data()
-        //         .reduce( function (a, b) {
-        //             return intVal(a) + intVal(b);
-        //         }, 0 );//console.log(total)
- 
-        //     // Update footer
-        //     $( api.column( 7 ).footer() ).html(
-        //         'TOP: '+pageTotal +'secs & Overall: '+ total +' secs)'
-        //     );
-
-        //     // $( api.column( 7 ).footer() ).html(
-        //     //     'TOP: '+pageTotal +' secs)'
-        //     // );
-        // }
-
+        }]
 
     });
-
-
-    /**
-     * Hiding global search input box
-     */
-    $('#TimeOnSiteReports_filter').css('display', 'none');
-
-
-    /**
-     * Datatable search functionlity
-     */
-    $('.search-input-text').on( 'keyup click', function () {   // for text boxes
-        var i =$(this).attr('data-column');  // getting column index
-        var v =$(this).val();  // getting search input value
-        newTable.columns(i).search(v).draw();
-    });
-
 
     /**
      * toggle column visisbility (https://datatables.net/examples/api/show_hide.html)
@@ -233,22 +170,29 @@ $(document).ready(function() {
 
     });
 
+    /**
+     * Highlight TOS duration column
+     */
+    $('#TimeOnSiteReports').on('draw.dt', function() {
+        var TOSDurationColumnIndex = 9;
+        $(newTable.column(TOSDurationColumnIndex).nodes()).addClass('highlightTOSDuration');
+    });
 
     /**
      * Apply the search for search columns
      */
     newTable.columns().every(function() {
-        var that = this;
-
-        $('input', this.footer()).on('keyup change', function(){
-            if ( that.search() !== this.value ) {
+        var that = this,
+            TOSColumnIndex = 8;
+        $('input', this.footer()).on('keyup change', function() {
+            if (that.search() !== this.value) {
                 that
-                    .search( this.value )
+                    .search(this.value)
+                    .order([TOSColumnIndex, 'asc']) //index of TimeOnSite column that should be ordered(sorted in ascending order)
                     .draw();
             }
         });
     });
-
 
     //Entry time search event based on column no. due to datatable jquery UI bug
     $('#datepickerPageEntry').on('keyup change', function(){
