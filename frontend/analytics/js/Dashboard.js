@@ -343,11 +343,13 @@ function getBigSessionByUrl(url, dataArr) {
 
 }
 
+
 /**
  * [urlPopularity description]
  * @param  {[type]} data [description]
  * @return {[type]}      [description]
  */
+var datatable   = dc.dataTable("#dc-data-table");
 function urlPopularity(data) {
 	//console.log('*');console.log(data);
 	var uniqueUrlArray,
@@ -422,12 +424,12 @@ function urlPopularity(data) {
 	}
 	//console.log(newData);
 
-
 	var ndx = crossfilter(newData);
+	window.TimeOnSiteVars = {};
+	window.TimeOnSiteVars.ndx = ndx;
 
 	var urlDim = ndx.dimension(function(d) {return d.URL;});
 
-	var datatable   = dc.dataTable("#dc-data-table");
 	datatable
 	    .dimension(urlDim)
 	    .group(function(d) {
@@ -468,9 +470,68 @@ function urlPopularity(data) {
 	    })
 	    .order(d3.descending);
 
+	    updatePagePopularity(ndx);
+    	datatable.render();
+    	
 }
 
+var ofs = 0, //inital offset value for pagination
+	pag = 20; //records limit in pagination
+/**
+ * [displayPagePopularity Updates 'previous' and 'next' button in page popularity table]
+ * @param  {[object]} ndx [crossfilter ndx]
+ * @return void
+ */
+function displayPagePopularity(ndx) {
+	d3.select('#begin')
+		.text(ofs);
+	d3.select('#end')
+		.text(ofs+pag-1);
+	d3.select('#previous')
+		.attr('disabled', ofs-pag<0 ? 'true' : null);
+	d3.select('#next')
+		.attr('disabled', ofs+pag>=ndx.size() ? 'true' : null);
+	d3.select('#size').text(ndx.size());
+}
 
+/**
+ * [updatePagePopularity description]
+ * @param  {[object]} ndx [crossfilter ndx]
+ * @return void
+ */
+function updatePagePopularity(ndx) {
+	if(ndx) {
+		datatable.beginSlice(ofs);
+		datatable.endSlice(ofs+pag);
+		displayPagePopularity(ndx);
+	}
+}
+
+/**
+ * [nextPagePopularity next button counter incrementer in page popularity table]
+ * @return void
+ */
+function nextPagePopularity() {
+	ndx = window.TimeOnSiteVars.ndx;
+	if(ndx) {
+		ofs += pag;
+		updatePagePopularity(datatable, ndx);
+		datatable.redraw();
+	}
+}
+
+/**
+ * [previousPagePopularity previous button counter decrementor in page popularity table]
+ * @return void
+ */
+function previousPagePopularity() {
+	ndx = window.TimeOnSiteVars.ndx;
+	if(ndx) {
+		ofs -= pag;
+		updatePagePopularity(datatable, ndx);
+		datatable.redraw();
+	}
+}
 
 
 
