@@ -42,7 +42,6 @@ function makeRequest(querystring) {
 
 	queue()
 	    .defer(d3.json, requestUrl)
-	    //.defer(d3.json, backendUrl)
 	    .await(makeGraphs);
 }
 
@@ -77,13 +76,8 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 	var dateFormat = d3.time.format("%m/%d/%Y %H:%M:%S");
 	dataSet.forEach(function(d) {
 		d.entry_time = dateFormat.parse(formatDate(d.entry_time));
-
 		d.tos_user_id = d.tos_user_id ? (d.tos_user_id == 'anonymous' ? 'anonymous' : 'authenticated') : 'anonymous';
-		//d.total_donations = +d.total_donations;
 	});
-
-	//var originalData = dataSet;
-	//console.log(dataSet)
 	
 	//Create a Crossfilter instance
 	var ndx = crossfilter(dataSet);
@@ -93,39 +87,15 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 		return d3.time.day(d.entry_time);
 		//return d.entryTime;
 	});
-	// var gradeLevel = ndx.dimension(function(d) { return d.grade_level; });
 	var pageTitle = ndx.dimension(function(d) { return d.title; });
-	
-	// var povertyLevel = ndx.dimension(function(d) { return d.poverty_level; });
 	
 	// var totalDonations  = ndx.dimension(function(d) { return d.total_donations; });
 
-
 	//Calculate metrics
 	var viewsByDate = dateTracked.group();
-	// var projectsByGrade = gradeLevel.group(); 
 	var viewsByPageTitle = pageTitle.group();
 	
-	// var projectsByPovertyLevel = povertyLevel.group();
-	
-
 	var all = ndx.groupAll();
-
-	//Calculate Groups
-	// var totalDonationsState = state.group().reduceSum(function(d) {
-	// 	return d.total_donations;
-	// });
-
-	// var totalDonationsGrade = gradeLevel.group().reduceSum(function(d) {
-	// 	return d.grade_level;
-	// });
-
-	// var totalDonationsFundingStatus = fundingStatus.group().reduceSum(function(d) {
-	// 	return d.funding_status;
-	// });
-
-
-
 	//var netTotalDonations = ndx.groupAll().reduceSum(function(d) {return d.total_donations;});
 
 	//Define threshold values for data
@@ -133,28 +103,23 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 	var maxDate = dateTracked.top(1)[0].entry_time;
 
 	console.log('Date chart min, max values...');
-	console.log(minDate);
-	console.log(maxDate);
+	console.log(minDate);console.log(maxDate);
 
     //Charts
 	var dateChart = dc.lineChart("#date-chart");
-	// var gradeLevelChart = dc.rowChart("#grade-chart");
-	var pageTitleChart = dc.rowChart("#resource-chart");
-	
-	// var povertyLevelChart = dc.rowChart("#poverty-chart");
+	var pageTitleChart = dc.rowChart("#page-title-chart");
 	var totalViews = dc.numberDisplay("#total-views");
 	// var netDonations = dc.numberDisplay("#net-donations");
 	
-
  //  selectField = dc.selectMenu('#menuselect')
  //        .dimension(state)
  //        .group(TOSSessionKeyGroup); 
 
-       dc.dataCount("#row-selection")
+   	dc.dataCount("#row-selection")
         .dimension(ndx)
         .group(all);
 
-
+    /* total views rendering */
 	totalViews
 		.formatNumber(d3.format("d"))
 		.valueAccessor(function(d){return d; })
@@ -167,7 +132,7 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 	// 	.formatNumber(d3.format(".3s"));
 
 	var newDateFormat = d3.time.format("%a %e %b %H:%M");
-
+	/* date chart renderer */
 	dateChart
 		//.width(600)
 		.height(220)
@@ -188,12 +153,7 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
     	.renderVerticalGridLines(true)
 		.xAxisLabel('Year')
 		.yAxisLabel('Views')
-		.yAxis().tickFormat(d3.format('.3s'))
-
-
-
-
-
+		.yAxis().tickFormat(d3.format('.3s'));
 
 
 	// setTimeout(function() {
@@ -236,21 +196,8 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 
 	// 	//dc.redrawAll();
 	// }, 8000);
-	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	/* page title chart renderer */
 	pageTitleChart
         //.width(300)
         .height(220)
@@ -258,27 +205,12 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
         .group(viewsByPageTitle)
         .elasticX(true)
         .xAxis().ticks(5);
-
-	// povertyLevelChart
-	// 	//.width(300)
-	// 	.height(220)
- //        .dimension(povertyLevel)
- //        .group(projectsByPovertyLevel)
- //        .xAxis().ticks(4);
-
-	// gradeLevelChart
-	// 	//.width(300)
-	// 	.height(220)
- //        .dimension(gradeLevel)
- //        .group(projectsByGrade)
- //        .xAxis().ticks(4);
-
-  
           
  	var userType = ndx.dimension(function(d) { return d.tos_user_id; });
-    var projectsByUserType = userType.group();
+    var userTypeGroup = userType.group();
 	var userTypeChart = dc.pieChart("#auth-anonymous-chart");
 
+	/* user type chart renderer */
 	userTypeChart
             .height(220)
             //.width(350)
@@ -287,7 +219,7 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
             .innerRadius(40)
             .transitionDuration(1000)
             .dimension(userType)
-            .group(projectsByUserType)
+            .group(userTypeGroup)
 		    .legend(dc.legend().x(250).y(100)) //LEGEND CODE
     		// .title(function(d){
     		// 	//console.log(d);
@@ -295,7 +227,6 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
     		// });
 
     dc.renderAll();
-
 };
 
 
@@ -534,6 +465,25 @@ function previousPagePopularity() {
 	}
 }
 
+/**
+ * [secondsToMinutesAdjuster converts seconds to minutes, rounding the value and rasie to 1 minute
+ * that are less than 60 seconds]
+ * @param  {[array]} arr [simplified tos and session key array]
+ * @return {[array]}     [formatted array]
+ */
+function secondsToMinutesAdjuster(arr) {
+	arr.forEach(function(item, index) {
+		// Raise second parameter to 1 minute that are lesser than 60 seconds.
+		if(item.timeOnSite < 60) {
+			item.timeOnSite = 60;
+		}
+
+		//convert seconds to minutes and round the value.
+		item.timeOnSite = Math.round((item.timeOnSite / 60));
+	});
+
+	return arr;
+}
 
 /**
  * [recentSessionsChart computes session duration]
@@ -578,6 +528,8 @@ function recentSessionsChart(data) {//console.log(data);
 	//console.log(uniqueSessionArray);
 	//console.log(sessionTOSArr);
 
+	newData = secondsToMinutesAdjuster(newData);
+
 	var dataSet = newData;
 
 	/* Limit no. of sessions shown */
@@ -616,7 +568,12 @@ function recentSessionsChart(data) {//console.log(data);
         .xUnits(dc.units.ordinal)
         .renderHorizontalGridLines(true)
         .renderVerticalGridLines(true)
-        .ordering(function(d){return d.value;})
+        .ordering(function(d) {
+        	//console.log(d);
+        	return d.value;
+        })
+        .xAxisLabel('Recent sessions')
+		.yAxisLabel('Duration in minutes')
         .yAxis().tickFormat(d3.format("s"));
 
 	sessionsChart.render();
