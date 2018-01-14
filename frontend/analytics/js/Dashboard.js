@@ -68,7 +68,7 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 		return false;
 	}
 
-	//checkyy(apiData);
+	recentSessionsChart(dataSet);
 
 	urlPopularity(dataSet);
 	
@@ -471,7 +471,8 @@ function urlPopularity(data) {
 	    .order(d3.descending);
 
 	    updatePagePopularity(ndx);
-    	datatable.render();
+
+	datatable.render();
     	
 }
 
@@ -534,39 +535,20 @@ function previousPagePopularity() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
- * [checkyy description]
- * @param  {[type]} data [description]
- * @return {[type]}      [description]
+ * [recentSessionsChart computes session duration]
+ * @param  {[array]} the dataset
  */
-function checkyy(data){
-	//console.log('*');console.log(data);
+function recentSessionsChart(data) {//console.log(data);
 	var uniqueSessionArray,
 		sessionArr = [],
 		sessionTOSArr = [];
 
 	data.map(function(d){
-		sessionArr.push(d.TOSSessionKey);
+		sessionArr.push(d.tos_session_key);
 		sessionTOSArr.push({
-			TOSSessionKey: d.TOSSessionKey,
-			timeOnSite: d.timeOnSite
+			TOSSessionKey: d.tos_session_key,
+			timeOnSite: d.timeonsite
 		});
 	});
 
@@ -586,68 +568,59 @@ function checkyy(data){
 		var max = getMaxOfArray(tempArr);
 
 		newData.push({
-			//TOSSessionKey: uniqueSessionArray[i],
-			TOSSessionKey: ++sa,
-			timeOnSite: max
+			TOSSessionKey: uniqueSessionArray[i],
+			timeOnSite: max,
+			alternateIndex: ++sa
 		});
 		
 	}
-	console.log(newData);
+
+	//console.log(uniqueSessionArray);
+	//console.log(sessionTOSArr);
 
 	var dataSet = newData;
+
+	/* Limit no. of sessions shown */
+	if(dataSet && dataSet.length > 50) {
+		dataSet = dataSet.slice(0, 50);
+	}
+
 	//Create a Crossfilter instance
 	var ndx = crossfilter(dataSet);
 	
-	
 	var timeOnSite = ndx.dimension(function(d) { return d.timeOnSite; });
-	var TOSSessionKey = ndx.dimension(function(d) { return d.TOSSessionKey; });
+	var TOSSessionKey = ndx.dimension(function(d) { return d.alternateIndex; });
 
 	var TOSSessionKeyGroup = TOSSessionKey.group();
 	var viewsByTimeOnSite = timeOnSite.group();
 
-	var totalDonationsState = TOSSessionKey.group().reduceSum(function(d) {
-		//console.log(d);
+	var totalSessionDuration = TOSSessionKey.group().reduceSum(function(d) {
 		return d.timeOnSite;
 	});
 
-	
-	
+	var all = ndx.groupAll();
 
-	// var all = ndx.groupAll();
+	var sessionsChart = dc.barChart("#sessions-chart");
 
-	// var stateDonations = dc.barChart("#state-donations");
+ 	sessionsChart
+    	//.width(800)
+        .height(220)
+        .transitionDuration(1000)
+        .dimension(TOSSessionKey)
+        .group(totalSessionDuration)
+        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .centerBar(false)
+        .gap(5)
+        .elasticY(true)
+        .x(d3.scale.ordinal().domain(TOSSessionKey))
+        .xUnits(dc.units.ordinal)
+        .renderHorizontalGridLines(true)
+        .renderVerticalGridLines(true)
+        .ordering(function(d){return d.value;})
+        .yAxis().tickFormat(d3.format("s"));
 
- // stateDonations
- //    	//.width(800)
- //        .height(220)
- //        .transitionDuration(1000)
- //        .dimension(TOSSessionKey)
- //        .group(totalDonationsState)
- //        .margins({top: 10, right: 50, bottom: 30, left: 50})
- //        .centerBar(false)
- //        .gap(5)
- //        .elasticY(true)
- //        .x(d3.scale.ordinal().domain(TOSSessionKey))
- //        .xUnits(dc.units.ordinal)
- //        .renderHorizontalGridLines(true)
- //        .renderVerticalGridLines(true)
- //        .ordering(function(d){return d.value;})
- //        .yAxis().tickFormat(d3.format("s"));
-
-
-    
-
-	// 	    userTypeChart.render();
-
-	// console.log('***');console.log(uniqueSessionArray);
-	// console.log(sessionTOSArr);
+	sessionsChart.render();
 }
-
-
-
-
-
-
 
 
 
