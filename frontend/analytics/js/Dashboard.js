@@ -291,7 +291,7 @@ function urlPopularity(data) {
 		UrlArr = [],
 		UrlDataArr = [];
 
-	data.map(function(d){
+	data.map(function(d) {
 		UrlArr.push(d.url);
 		UrlDataArr.push({
 			URL: d.url,
@@ -520,9 +520,8 @@ function recentSessionsChart(data) {//console.log(data);
 		newData.push({
 			TOSSessionKey: uniqueSessionArray[i],
 			timeOnSite: max,
-			alternateIndex: ++sa
-		});
-		
+			alternateIndex: (++sa)
+		});	
 	}
 
 	//console.log(uniqueSessionArray);
@@ -533,8 +532,9 @@ function recentSessionsChart(data) {//console.log(data);
 	var dataSet = newData;
 
 	/* Limit no. of sessions shown */
-	if(dataSet && dataSet.length > 50) {
-		dataSet = dataSet.slice(0, 50);
+	var sessionsLimit = 75; //recent 75 sessions
+	if(dataSet && dataSet.length > sessionsLimit) {
+		dataSet = dataSet.slice(0, sessionsLimit);
 	}
 
 	//Create a Crossfilter instance
@@ -568,12 +568,8 @@ function recentSessionsChart(data) {//console.log(data);
         .xUnits(dc.units.ordinal)
         .renderHorizontalGridLines(true)
         .renderVerticalGridLines(true)
-        .ordering(function(d) {
-        	//console.log(d);
-        	return d.value;
-        })
-        .xAxisLabel('Recent sessions')
-		.yAxisLabel('Duration in minutes')
+        .xAxisLabel('Recent ' + sessionsLimit + ' sessions')
+		.yAxisLabel('Duration (TOS)')
         .yAxis().tickFormat(d3.format("s"));
 
 	sessionsChart.render();
