@@ -59,7 +59,6 @@ $(document).ready(function() {
             type: 'POST',
             error: function(xhr, error, thrown) {  // error handling
                 //console.log(xhr);console.log(error);console.log(thrown);
-                $('.TimeOnSiteReports-error').html('');
                 $('#TimeOnSiteReports').append('<tbody class="TimeOnSiteReports-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
                 $('#TimeOnSiteReports_processing').css('display', 'none');
                 alert('Something went wrong!');

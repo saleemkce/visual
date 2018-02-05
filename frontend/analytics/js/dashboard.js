@@ -7,20 +7,17 @@ if(TOSConfig.language == 'nodeJs') {
 console.log('At analytics : ' + backendUrl);
 
 /**
- * [padLeft description]
- * @param  {[type]} base [description]
- * @param  {[type]} chr  [description]
- * @return {[type]}      [description]
+ * [padLeft It performs left padding in given string]
  */
-Number.prototype.padLeft = function(base, chr){
+Number.prototype.padLeft = function(base, chr) {
    var  len = (String(base || 10).length - String(this).length)+1;
    return len > 0? new Array(len).join(chr || '0')+this : this;
 }
 
 /**
- * [formatDate description]
- * @param  {[type]} dateString [description]
- * @return {[type]}            [description]
+ * [formatDate It formats given date like "2000-01-04 21:48:48.344"]
+ * @param  {[string]} dateString [the date string]
+ * @return {[string]}            [the formatted datetime value]
  */
 function formatDate(dateString) {
     var d = new Date(dateString),
@@ -34,6 +31,11 @@ function formatDate(dateString) {
     return dformat;
 }
 
+/**
+ * [makeRequest It makes HTTP request to fetch data to be used in creating charts]
+ * @param  {[string]} querystring [the query string]
+ * @return {[void]}
+ */
 function makeRequest(querystring) {
 	var requestUrl = backendUrl;
 	if(querystring) {
@@ -42,13 +44,19 @@ function makeRequest(querystring) {
 
 	queue()
 	    .defer(d3.json, requestUrl)
-	    .await(makeGraphs);
+	    .await(makeCharts);
 }
 
+// Make request and initiate data visualization
 makeRequest();
 
-
-function makeGraphs(error, dataSet) {console.log(dataSet)
+/**
+ * [makeCharts It uses the dataset to create charts]
+ * @param  {[object]} error   [the error response]
+ * @param  {[array]} dataSet [the dataset]
+ * @return {[void]}
+ */
+function makeCharts(error, dataSet) {console.log(dataSet)
 
 	if(!dataSet || !dataSet.length) {
 		//No data to show. Display dialog.
@@ -85,18 +93,15 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 	//Define Dimensions
 	var dateTracked = ndx.dimension(function(d) {
 		return d3.time.day(d.entry_time);
-		//return d.entryTime;
+		//return d.entry_time;
 	});
 	var pageTitle = ndx.dimension(function(d) { return d.title; });
-	
-	// var totalDonations  = ndx.dimension(function(d) { return d.total_donations; });
 
 	//Calculate metrics
 	var viewsByDate = dateTracked.group();
 	var viewsByPageTitle = pageTitle.group();
 	
 	var all = ndx.groupAll();
-	//var netTotalDonations = ndx.groupAll().reduceSum(function(d) {return d.total_donations;});
 
 	//Define threshold values for data
 	var minDate = dateTracked.bottom(1)[0].entry_time;
@@ -109,11 +114,6 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 	var dateChart = dc.lineChart("#date-chart");
 	var pageTitleChart = dc.rowChart("#page-title-chart");
 	var totalViews = dc.numberDisplay("#total-views");
-	// var netDonations = dc.numberDisplay("#net-donations");
-	
- //  selectField = dc.selectMenu('#menuselect')
- //        .dimension(state)
- //        .group(TOSSessionKeyGroup); 
 
    	dc.dataCount("#row-selection")
         .dimension(ndx)
@@ -124,12 +124,6 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 		.formatNumber(d3.format("d"))
 		.valueAccessor(function(d){return d; })
 		.group(all);
-
-	// netDonations
-	// 	.formatNumber(d3.format("d"))
-	// 	.valueAccessor(function(d){return d; })
-	// 	.group(netTotalDonations)
-	// 	.formatNumber(d3.format(".3s"));
 
 	var newDateFormat = d3.time.format("%a %e %b %H:%M");
 	/* date chart renderer */
@@ -156,47 +150,6 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 		.yAxis().tickFormat(d3.format('.3s'));
 
 
-	// setTimeout(function() {
-	// 	console.error('going to call....');
-
-	// 	//dateChart.filter(null);
-	// 	// dateChart.filterAll();
-	// 	// dateChart.filter(dc.filters.RangedFilter(new Date(2017, 3, 5), new Date(2017, 6, 5)));
-	// 	dateTracked.filter(dc.filters.RangedFilter(new Date(2017, 1, 1), new Date(2017, 2, 25)));
-	// 	var minDate = dateTracked.bottom(1)[0].entryTime;
-	// 	var maxDate = dateTracked.top(1)[0].entryTime;
-	// 	console.log(minDate)
-	// 	console.log(maxDate)
-
-	// dateChart
-	// 	//.width(600)
-	// 	.height(220)
-	// 	//.height(400)
-	// 	.margins({top: 10, right: 50, bottom: 30, left: 50})
-	// 	.dimension(dateTracked)
-	// 	.group(viewsByDate)
-	// 	//.renderArea(true)
-	// 	.transitionDuration(500)
-	// 	.x(d3.time.scale().domain([minDate, maxDate]))
-	// 	.brushOn(false)
-	//     .title(function(d) {
-	//     	//console.log(d.key);
-	// 		return newDateFormat(d.key) + '\nNumber of Events: ' + d.value;
-	// 	})
-	// 	.elasticY(false)
-	// 	.renderHorizontalGridLines(true)
- //    	.renderVerticalGridLines(true)
-	// 	.xAxisLabel('Year')
-	// 	.yAxisLabel('Views')
-	// 	.yAxis().tickFormat(d3.format('.3s'))
-
-
-
-	// 	dateChart.redraw();
-
-	// 	//dc.redrawAll();
-	// }, 8000);
-
 	/* page title chart renderer */
 	pageTitleChart
         //.width(300)
@@ -209,7 +162,6 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
  	var userType = ndx.dimension(function(d) { return d.tos_user_id; });
     var userTypeGroup = userType.group();
 	var userTypeChart = dc.pieChart("#auth-anonymous-chart");
-
 	/* user type chart renderer */
 	userTypeChart
             .height(220)
@@ -231,28 +183,28 @@ function makeGraphs(error, dataSet) {console.log(dataSet)
 
 
 /**
- * [getMaxOfArray description]
- * @param  {[type]} arr [description]
- * @return {[type]}     [description]
+ * [getMaxOfArray It finds the large value in array]
+ * @param  {[array]} arr [the array of numerical values]
+ * @return {[integer]}
  */
 function getMaxOfArray(arr) {
   return Math.max.apply(null, arr);
 }
 
 /**
- * [secondToDuration description]
- * @param  {[type]} sec [description]
- * @return {[type]}     [description]
+ * [secondToDuration It converts seconds to readable format]
+ * @param  {[integer]} sec [time in seconds]
+ * @return {[string]} [formatted duration e.g, 0d 00h 00m 00s]
  */
 function secondToDuration(sec) {
   return (parseInt(sec / 86400) + 'd ' + (new Date(sec%86400*1000)).toUTCString().replace(/.*(\d{2}):(\d{2}):(\d{2}).*/, "$1h $2m $3s"));
 }
 
 /**
- * [getBigSessionByUrl description]
- * @param  {[type]} url     [description]
- * @param  {[type]} dataArr [description]
- * @return {[type]}         [description]
+ * [getBigSessionByUrl It computes large session by URL]
+ * @param  {[string]} url     [page URL]
+ * @param  {[array]} dataArr [given dataset]
+ * @return {[object]}         [data for large session]
  */
 function getBigSessionByUrl(url, dataArr) {
 	var TOPRawArr = [], viewCounter = 0;
@@ -274,18 +226,17 @@ function getBigSessionByUrl(url, dataArr) {
 
 }
 
+//data table chart
+var datatable = dc.dataTable("#dc-data-table");
 
 /**
- * [urlPopularity description]
- * @param  {[type]} data [description]
- * @return {[type]}      [description]
+ * [urlPopularity It computes page popularity by URL]
+ * @param  {[array]} the dataset
  */
-var datatable   = dc.dataTable("#dc-data-table");
 function urlPopularity(data) {
 	//console.log('*');console.log(data);
 	var uniqueUrlArray,
-		titleArr = [], 
-		bigPageSession = [], 
+		titleArr = [],
 		TOPArr = [],
 		viewCount = [];
 		UrlArr = [],
@@ -299,21 +250,10 @@ function urlPopularity(data) {
 			timeOnPage: d.timeonpage
 		});
 	});
-
-	// uniqueUrlArray = UrlArr.filter(function(item, pos) {
-	//     return UrlArr.indexOf(item) == pos;
-	// });
 	
 	uniqueUrlArray = UrlArr.filter(function(item, pos) {
 	    if(UrlArr.indexOf(item) == pos) {
 	    	titleArr.push(UrlDataArr[pos].title);
-
-	    	// *** TEMP ***
-	    	//bigPageSession.push(UrlDataArr[pos].timeOnPage)
-	    	// console.log('**');
-	    	// console.log(UrlDataArr);
-	    	// *** TEMP ***
-
 	    	return true;
 	    };
 	});
@@ -324,7 +264,6 @@ function urlPopularity(data) {
 		viewCount.push(sessionData.viewCount);
 	}
 	//console.log(TOPArr);
-	
 
 	var newData = [];
 	for(var i = 0; i < uniqueUrlArray.length; i++) {
@@ -422,7 +361,7 @@ function displayPagePopularity(ndx) {
 }
 
 /**
- * [updatePagePopularity description]
+ * [updatePagePopularity It reassigns previous and next pages in chart and updates it]
  * @param  {[object]} ndx [crossfilter ndx]
  * @return void
  */
