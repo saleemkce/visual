@@ -352,3 +352,8 @@ table.ui-visual-table th {
     background-color: #013c84;
     color: white;
 }
+
+.disconnected-chart-label {
+    padding-left: 10px;
+    font-style: italic;
+}

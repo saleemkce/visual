@@ -46,7 +46,7 @@ class TimeOnSite extends Database {
 
 /* Initialize and access methods in TimeOnSite */
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-	$data = json_decode(file_get_contents("php://input"));
+	$data = json_decode(file_get_contents('php://input'));
 	$analytics = new TimeOnSite();
 	$analytics->save($data);
 } else {

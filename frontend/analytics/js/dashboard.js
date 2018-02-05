@@ -323,7 +323,6 @@ function urlPopularity(data) {
 		TOPArr.push(sessionData.bigSession);
 		viewCount.push(sessionData.viewCount);
 	}
-
 	//console.log(TOPArr);
 	
 
@@ -335,10 +334,9 @@ function urlPopularity(data) {
 				tempArr.push(UrlDataArr[j].timeOnPage);
 			}
 		}
-		//var max = getMaxOfArray(tempArr);
 
 		var sum = 0;
-		tempArr.map(function(item){ sum += item; }); 
+		tempArr.map(function(item){ sum += item; });
 
 		newData.push({
 			URL: uniqueUrlArray[i],
@@ -348,10 +346,6 @@ function urlPopularity(data) {
 			bigPageSession: secondToDuration(TOPArr[i]),
 			duration: secondToDuration(sum)
 		});
-	
-
-	
-
 	}
 	//console.log(newData);
 
@@ -363,8 +357,9 @@ function urlPopularity(data) {
 
 	datatable
 	    .dimension(urlDim)
-	    .group(function(d) {
-	    	return "Page Popularity Table"
+     	.group(function(d) {
+	    	return '';
+	    	//return 'Page Popularity Table';
      	})
 	    .size(newData.length)
 	    // dynamic columns creation using an array of closures
@@ -377,10 +372,10 @@ function urlPopularity(data) {
 		        label: "Title",
 		        format: function (d) { return d.title; }
 		    },
-		    {
-		        label: "Seconds",
-		        format: function (d) { return d.timeOnPage; },
-		    },
+		    // {
+		    //     label: "Seconds",
+		    //     format: function (d) { return d.timeOnPage; },
+		    // },
 		    {
 		    	label: "Page views",
 		    	format: function(d) { return d.pageViews; }

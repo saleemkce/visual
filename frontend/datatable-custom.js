@@ -45,7 +45,7 @@ $(document).ready(function() {
         if (title == 'Page Entry' || title == 'Page Exit') {
             // input not included due to datatable jquery UI bug
         } else {
-            $(this).html( '<input type="text" id=' + title + ' placeholder="Search ' + title + '" />' );
+            $(this).html('<input type="text" id=' + title + ' placeholder="Search ' + title + '" />');
         }
     });
 
@@ -59,9 +59,9 @@ $(document).ready(function() {
             type: 'POST',
             error: function(xhr, error, thrown) {  // error handling
                 //console.log(xhr);console.log(error);console.log(thrown);
-                $(".TimeOnSiteReports-error").html("");
-                $("#TimeOnSiteReports").append('<tbody class="TimeOnSiteReports-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
-                $("#TimeOnSiteReports_processing").css("display", "none");
+                $('.TimeOnSiteReports-error').html('');
+                $('#TimeOnSiteReports').append('<tbody class="TimeOnSiteReports-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+                $('#TimeOnSiteReports_processing').css('display', 'none');
                 alert('Something went wrong!');
             }
         },
@@ -223,7 +223,7 @@ $(document).ready(function() {
             data: {
                 timestamp: (new Date()).getTime()
             },
-            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: 'json',
             success: function(response) {
                 if(response.code == 'refresh_success') {
@@ -254,6 +254,13 @@ $(document).ready(function() {
         $('#datepickerPageEntry').val('');
         $('#datepickerPageExit').val('');
 
+        //Enabling hidden columns
+        $('a.toggle-visibility').each(function() {
+            newTable.column($(this).attr('data-column')).visible(true);
+            $(this).attr('data-active', '1');
+            $(this).css('color', '#fff');
+        });
+
         //clear individual column search box and remove applied datatable filters
         $('.dataTable tfoot input[type="text"]').val('');
         $('#TimeOnSiteReports').DataTable().search('').columns().search('').draw();
@@ -266,6 +273,10 @@ $(document).ready(function() {
         $(document).on('keydown', '#TOP, #TOS', function(e){-1!==$.inArray(e.keyCode,[46,8,9,27,13,110,190])||(/65|67|86|88/.test(e.keyCode)&&(e.ctrlKey===true||e.metaKey===true))&&(!0===e.ctrlKey||!0===e.metaKey)||35<=e.keyCode&&40>=e.keyCode||(e.shiftKey||48>e.keyCode||57<e.keyCode)&&(96>e.keyCode||105<e.keyCode)&&e.preventDefault()});
     });
 
+    /**
+     * Hiding global search filter of datatable
+     */
+    $('#TimeOnSiteReports_filter').css('display', 'none');
 
 });
 

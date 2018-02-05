@@ -9,8 +9,7 @@ var mongoose = require('mongoose'),
 
 //schemas
 var TosSchema = require('../schema/tos.schema'),
-    ActivitySchema = require('../schema/activity.schema'),
-    projectsSchema = require('../schema/project.schema');
+    ActivitySchema = require('../schema/activity.schema');
 
 /**
  * [saveTos Method to save TimeOnSite(tos) data either tos or activity]
@@ -83,36 +82,6 @@ module.exports.saveTos = function(req, res, next) {
     res.send('success');
     
 };
-
-
-// sample donorschoose....
-module.exports.getProjects = function(req, res, next) {
-    projectsSchema.find(function(err, data) {
-        if (err) {console.log(err)
-            res.status(err);
-        } else {
-            console.log(data);
-            res.send(data);
-        }
-    });
-};
-// sample donorschoose....
-
-
-/*
-module.exports.getTosPHP = function(req, res, next) {
-    TosSchema
-        .find()
-        .exec(function(err, data) {
-            if (err) {
-                res.status(err);
-            } else {
-                res.json(data);
-            }
-        });
-
-};
- */
 
 /**
  * [getTosAnalytics Retrieves a set of data for making analytics with dc charting]
