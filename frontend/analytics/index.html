@@ -53,37 +53,41 @@
 		<div id="page" style="margin-top:-61px;">
 
 			<div class="container">
+				<!-- Date picker element -->
 				<div class="row">
+					<div class="8u">
+						<span style="margin-right:5px;">Date filter</span>
+						<input type="text" id="datepickerPageEntry" placeholder="Start Date" class="date-picker-custom-ui" />
+						<input type="text" id="datepickerPageExit" placeholder="End Date" class="date-picker-custom-ui" style="margin-left:10px;" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="3u chart-wrapper" id="total-views">
+						<div class="chart-title">
+							<strong>Total Occurances</strong>
+						</div>					
+					</div>
+
+					<div class="4u"></div>
+
+					<div class="5u dc-data-count dc-chart" id="row-selection" style="text-align: right;">
+						<span class="filter-count">_</span> selected out of <span class="total-count">_</span> records |
+						<span>
+							<a id="resetAll" href="javascript:dc.filterAll();dc.redrawAll();"><font color="#33CC99">Reset All</font></a>
+						</span>
+					</div>
+
+					<!-- <div class="2u chart-wrapper">
+						<div class="chart-title">
+					</div> -->
 					<!-- <div class="2u chart-wrapper" style="background-color: #33CC99; height: 60px;">
 						<div class="chart-title"></div>
 					</div>
 					<div class="2u">
 						<div> <span> &nbsp</span></div>
 					</div> -->
-					<div class="2u chart-wrapper" id="total-views">
-						<div class="chart-title">
-							<strong>Total Occurances</strong>
-						</div>					
-					</div>
-					<!-- <div class="2u chart-wrapper">
-						<div class="chart-title">
-					</div> -->
-
-					<div class="3u dc-data-count dc-chart" id="row-selection">
-						<span class="filter-count">_</span> selected out of <span class="total-count">_</span> records |
-						<span>
-							<a href="javascript:dc.filterAll();dc.redrawAll();"><font color="#33CC99">Reset All</font></a>
-						</span>
-					</div>
 				</div>
-
-				<div class="row">
-					<span style="margin-right:5px;">Date filter</span>
-					<input type="text" id="datepickerPageEntry" placeholder="Start Date" style="width: 150px !important;" />
-					<span style="margin-left:10px;"></span>
-					<input type="text" id="datepickerPageExit" placeholder="End Date" style="width: 150px !important;" />
-				</div>
-
 
 				<div class="row">
 					<div class="6u chart-wrapper"  id="date-chart">

@@ -511,14 +511,13 @@ function recentSessionsChart(data) {//console.log(data);
 
 
 
-
 /**
  * Datepicker configuration
  *	https://api.jqueryui.com/datepicker/
  */
 $(document).ready(function() {
-	var startDate=null,
-		endDate=null;
+	var startDate = null,
+		endDate = null;
 
 	$("#datepickerPageEntry, #datepickerPageExit").datepicker({
 	    autoSize: true,
@@ -526,7 +525,7 @@ $(document).ready(function() {
 	    changeYear: true,
 	    dateFormat: 'yy-mm-dd',
 	    showAnim: 'fold',
-	    showButtonPanel: true,
+	    //showButtonPanel: true,
 
 	    onSelect: function(date) {
 
@@ -541,5 +540,15 @@ $(document).ready(function() {
     			makeRequest(qs);
     		}
 		},
+	});
+
+	$('#resetAll').on('click', function() {
+		//clear date filters
+		$('#datepickerPageEntry').val('');
+        $('#datepickerPageExit').val('');
+        startDate = null;
+        endDate = null;
+
+        makeRequest();
 	});
 });

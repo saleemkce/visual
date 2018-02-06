@@ -357,3 +357,9 @@ table.ui-visual-table th {
     padding-left: 10px;
     font-style: italic;
 }
+
+.date-picker-custom-ui {
+   width: 150px !important;
+   text-align:center;
+   padding: 3px;
+}
