@@ -21,17 +21,16 @@ var TosSchema = require('../schema/tos.schema'),
 module.exports.saveTos = function(req, res, next) {
     var data = req.body;
     console.log(data);
-    //console.log(data.TOSId);
 
-    var freshData = {};
+    var trackingData = {};
 
     if(data && data.trackingType && data.trackingType == 'tos') {
 
-        // converting to ISO date format
+        // converting to ISO date format for mongo date format compatibility
         data.entryTime = (new Date(data.entryTime)).toISOString();
         data.exitTime = (new Date(data.exitTime)).toISOString();
 
-        freshData = {
+        trackingData = {
             tos_id : data.TOSId,
             tos_session_key : data.TOSSessionKey,
             tos_user_id : data.TOSUserId,
@@ -47,17 +46,21 @@ module.exports.saveTos = function(req, res, next) {
             exit_time : data.exitTime
         };
 
-        var Tos = new TosSchema(freshData);
-        Tos.save(freshData, function(err) {
-            console.log(err);
+        var Tos = new TosSchema(trackingData);
+        Tos.save(function(err, record) {
+            if(err) {
+                console.log(err);
+            }
+            res.send('success');
         });
         
     } else if(data && data.trackingType && data.trackingType == 'activity') {
         
+        // converting to ISO date format for mongo date format compatibility
         data.activityStart = (new Date(data.activityStart)).toISOString();
         data.activityEnd = (new Date(data.activityEnd)).toISOString();
 
-        freshData = {
+        trackingData = {
             tos_id : data.TOSId,
             tos_session_key : data.TOSSessionKey,
             tos_user_id : data.TOSUserId,
@@ -71,16 +74,14 @@ module.exports.saveTos = function(req, res, next) {
             tracking_type: data.trackingType
         };
 
-        var Activity = new ActivitySchema(freshData);
-        Activity.save(freshData, function(err) {
-            console.log(err);
+        var Activity = new ActivitySchema(trackingData);
+        Activity.save(function(err, record) {
+            if(err) {
+                console.log(err);
+            }
+            res.send('success');
         });
-
     }
-    
-    console.log('type : ' + data.trackingType);
-    res.send('success');
-    
 };
 
 /**
@@ -212,15 +213,13 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
                 if(searchType == 'dateTimeSearch') {
                     var dateStr = new Date(v),
                         dateQuery;
-                        //currentDate,
-                        //currentDateString;
                         
                         entryTimePresent = (req.body.columns[i].data == 'entry_time');
 
                         entryDateString = dateStr.toISOString();
 
                     if(entryTimePresent) {
-                        console.log('only entry is present!');
+                        //console.log('only entry date is present!');
                         dateQuery = {
                             $eq: entryDateString
                         };    
@@ -239,7 +238,7 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
                     if(entryTimePresent) {
 
                         var currentDate = new Date(dateStr);
-                        var nextDate = currentDate.setDate((new Date(dateStr)).getDate() + 1)
+                        var nextDate = currentDate.setDate((new Date(dateStr)).getDate() + 1);
                         nextDate = new Date(nextDate);
 
                         dateQuery = {
@@ -263,7 +262,7 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
                     exitDateString = dateStr.toISOString();
 
                 if(entryTimePresent && exitTimePresent) {
-                    console.log('Both are present!');
+                    //console.log('Both dates are present!');
 
                     fieldToSearch['entry_time'] = {
                         '$gte': entryDateString
@@ -273,16 +272,14 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
                     };
 
                 } else {
-                    console.log('only exit is present!');
-
+                    //console.log('only exit date is present!');
                     var searchType = module.exports.isValidDate(v);
                     if(searchType == 'dateTimeSearch') {
                         dateQuery = {
                             $eq: exitDateString
                         }
+
                     } else if(searchType == 'dateSearch') {
-
-
                         var currentDate = new Date(dateStr);
                         var nextDate = currentDate.setDate((new Date(dateStr)).getDate() + 1)
                         nextDate = new Date(nextDate);
@@ -292,9 +289,7 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
                             $lt: (new Date(nextDate.getFullYear(), nextDate.getMonth(), nextDate.getDate())).toISOString()
                         }
 
-
-                    } 
-
+                    }
                     fieldToSearch[req.body.columns[i].data] = dateQuery;
 
                 }    
@@ -308,7 +303,7 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
             }
 
         } else {
-            //console.log('NO DATA... for ' + req.body.columns[i].search);
+            //console.log('No data ... for ' + req.body.columns[i].search);
         }
     }
 
@@ -341,7 +336,6 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
                             schema = schema
                                 .sort('' + fieldToOrder)
                         }
-                        //console.log(fieldToOrder, orderBy)
                     }
                     
                     schema = schema
@@ -368,21 +362,21 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
 
     } else {
         TosSchema
-        .find()
-        .skip(req.body.start)
-        .limit(req.body.length)
-        .exec(function(err, data) {
-            if (err) {
-                res.status(err);
-            } else {
-                response.draw = parseInt(req.body.draw);
-                response.recordsTotal = totalRecords;
-                response.recordsFiltered = recordsFiltered;
-                response.data = data;
-                response.error = err;
-                res.json(response);
-            }
-        });
+            .find()
+            .skip(req.body.start)
+            .limit(req.body.length)
+            .exec(function(err, data) {
+                if (err) {
+                    res.status(err);
+                } else {
+                    response.draw = parseInt(req.body.draw);
+                    response.recordsTotal = totalRecords;
+                    response.recordsFiltered = recordsFiltered;
+                    response.data = data;
+                    response.error = err;
+                    res.json(response);
+                }
+            });
     }
 
 };
