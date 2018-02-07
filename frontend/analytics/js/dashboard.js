@@ -544,11 +544,14 @@ $(document).ready(function() {
 
 	$('#resetAll').on('click', function() {
 		//clear date filters
-		$('#datepickerPageEntry').val('');
-        $('#datepickerPageExit').val('');
-        startDate = null;
-        endDate = null;
+        if($('#datepickerPageEntry').val() && $('#datepickerPageExit').val()) {
+        	$('#datepickerPageEntry').val('');
+	        $('#datepickerPageExit').val('');
+	        startDate = null;
+	        endDate = null;
 
-        makeRequest();
+	        //when date filter is applied, reset filter might enforce full data refresh
+        	makeRequest();
+        }
 	});
 });
