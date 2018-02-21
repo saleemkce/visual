@@ -157,6 +157,8 @@ function makeCharts(error, dataSet) {console.log(dataSet)
         .dimension(pageTitle)
         .group(viewsByPageTitle)
         .elasticX(true)
+        .rowsCap(7)  /* limiting top 7 by title */
+        .othersGrouper(false)
         .xAxis().ticks(5);
           
  	var userType = ndx.dimension(function(d) { return d.tos_user_id; });
