@@ -58,10 +58,20 @@ class Analytics extends Database {
         }
     }
 
+    /**
+     * [escapeInput sanitize user input]
+     * @param  [string] $d [user input]
+     * @return [string]
+     */
     public function escapeInput($d) {
         return mysqli_real_escape_string($this->dbConnection, $d);
     }
 
+    /**
+     * [isValidDate checks if given date is valid]
+     * @param  [string]  $dateString [date string]
+     * @return boolean
+     */
     public function isValidDate($dateString) {
         return (bool)strtotime($dateString);
     }

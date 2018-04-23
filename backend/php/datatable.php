@@ -14,6 +14,9 @@ class DataTableReports extends Database {
         $this->checkSession();
     }
     
+    /**
+     * [getRecordsCount retrieves overall data count]
+     */
     public function getRecordsCount() {
         try{
             $queryTotal = "SELECT count(*) as total FROM tos";
@@ -35,6 +38,9 @@ class DataTableReports extends Database {
         }
     }
 
+    /**
+     * [checkSession checks if session already exists]
+     */
     public function checkSession() {
         if(!isset($_SESSION['count'])) {$this->sessionAvailability = false;
             $this->getRecordsCount();
@@ -44,6 +50,12 @@ class DataTableReports extends Database {
         }
     }
 
+    /**
+     * [handleDate build query for formatted date search]
+     * @param  [string] $k [entry_time || exit_time]
+     * @param  [string] $v [actual date string]
+     * @return [string]    [prepared date query]
+     */
     public function handleDate($k, $v) {
         $str = $v;
 
@@ -56,14 +68,31 @@ class DataTableReports extends Database {
 
     }
 
+    /**
+     * [hanldeDateJoinCondition build query for simple date search with AND condition between entry_time and exit_time]
+     * @param  [string] $entryDateField [entry_time field]
+     * @param  [string] $exitDateField  [exit_time field]
+     * @param  [string] $entryDate      [entry_time]
+     * @param  [string] $exitDate       [exit_time]
+     * @return [string]                 [prepared date query]
+     */
     public function hanldeDateJoinCondition($entryDateField, $exitDateField, $entryDate, $exitDate) {
         return $entryDateField.">='".$this->escapeInput($entryDate)."' AND ".$exitDateField."<='".$this->escapeInput($exitDate)."'";
     }
 
+    /**
+     * [escapeInput sanitize user input]
+     * @param  [string] $d [user input]
+     * @return [string]
+     */
     public function escapeInput($d) {
         return mysqli_real_escape_string($this->dbConnection, $d);
     }
 
+    /**
+     * [getDatatable function to process search queries and retrive DATATABLES data from DB]
+     * @return [array] [data set]
+     */
     public function getDatatable() {
         try {
             $searchCol = array();
@@ -162,7 +191,7 @@ class DataTableReports extends Database {
                 
             } else {
                 // Perform queries
-                $query = "SELECT * FROM tos limit " . $_POST['start'] . ', ' .$_POST['length'];        
+                $query = "SELECT * FROM tos ORDER BY entry_time DESC limit " . $_POST['start'] . ', ' .$_POST['length'];        
             }
            
             $queryResponse = mysqli_query($this->dbConnection, $query);
@@ -209,6 +238,9 @@ class DataTableReports extends Database {
         }
     }
 
+    /**
+     * [refreshData get current table information]
+     */
     public function refreshData() {
         $this->getRecordsCount();
     }

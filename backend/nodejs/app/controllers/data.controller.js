@@ -365,6 +365,9 @@ module.exports.getTosDataTable = function(req, res, next) {//console.log(req.bod
             .find()
             .skip(req.body.start)
             .limit(req.body.length)
+            .sort({
+                $natural: -1
+            })
             .exec(function(err, data) {
                 if (err) {
                     res.status(err);

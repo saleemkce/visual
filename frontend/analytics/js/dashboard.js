@@ -32,6 +32,20 @@ function formatDate(dateString) {
 }
 
 /**
+ * [millisecondsToSeconds converts milliseconds to seconds]
+ * @param  {[array]} data [the dataset]
+ * @return {[array]}
+ */
+function millisecondsToSeconds(data) {
+	for(var i = 0; i < data.length; i++) {
+		data[i].timeonpage = ((data[i].timeonpage >= 1000) ? Math.floor(data[i].timeonpage / 1000) : 1);
+		data[i].timeonsite = ((data[i].timeonsite >= 1000) ? Math.floor(data[i].timeonsite / 1000) : 1);
+	}
+
+	return data;
+}
+
+/**
  * [makeRequest It makes HTTP request to fetch data to be used in creating charts]
  * @param  {[string]} querystring [the query string]
  * @return {[void]}
@@ -56,7 +70,8 @@ makeRequest();
  * @param  {[array]} dataSet [the dataset]
  * @return {[void]}
  */
-function makeCharts(error, dataSet) {console.log(dataSet)
+function makeCharts(error, dataSet) {
+	//console.log(dataSet)
 
 	if(!dataSet || !dataSet.length) {
 		//No data to show. Display dialog.
@@ -73,6 +88,11 @@ function makeCharts(error, dataSet) {console.log(dataSet)
         });
 
 		return false;
+	}
+
+	/* case: millisecond; convert to seconds from milliseconds for reports generation */
+	if(dataSet[0].timeonpage_tracked_by == 'millisecond') {
+		dataSet = millisecondsToSeconds(dataSet);
 	}
 
 	recentSessionsChart(dataSet);
